@@ -155,3 +155,18 @@ ul {
 .sm-weather-icon {
   width: 60px;
 }
+.footer {
+  padding-top: 32px;
+  padding-bottom: 100px;
+  display: block;
+  text-align: center;
+  font-size: 14px;
+}
+
+a {
+  font-size: 14px;
+  line-height: 24px;
+  text-decoration: none;
+  color: #25363e;
+  font-weight: 400;
+}
