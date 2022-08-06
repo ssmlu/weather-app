@@ -41,6 +41,28 @@ if (now.getMinutes() < 10) {
 
 h4.innerHTML = `${day}, ${date} ${month} ${year}, ${hour}:${minutes}`;
 
+//Update weather icons
+let iconConvert = {
+  "01d": "svg/clearsky.svg",
+  "01n": "svg/clearsky.svg",
+  "02d": "svg/fewclouds.svg",
+  "02n": "svg/fewclouds.svg",
+  "03d": "svg/scatteredclouds.svg",
+  "03n": "svg/scatteredclouds.svg",
+  "04d": "svg/brokenclouds.svg",
+  "04n": "svg/brokenclouds.svg",
+  "09d": "svg/showerrain.svg",
+  "09n": "svg/showerrain.svg",
+  "10d": "svg/rain.svg",
+  "10n": "svg/rain.svg",
+  "11d": "svg/thunderstorm.svg",
+  "11n": "svg/thunderstorm.svg",
+  "13d": "svg/snow.svg",
+  "13n": "svg/snow.svg",
+  "50d": "svg/mist.svg",
+  "50n": "svg/mist.svg",
+};
+
 //Next five days
 let shortdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
@@ -90,10 +112,7 @@ function displayTemperature(response) {
   descriptionElement.innerHTML = `${response.data.weather[0].description}`;
   humidityElement.innerHTML = `Humidity: ${response.data.main.humidity}% `;
   windElement.innerHTML = `Wind: ${Math.round(response.data.wind.speed)}KM/H `;
-  iconElement.setAttribute(
-    "src",
-    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
-  );
+  iconElement.setAttribute("src", iconConvert[response.data.weather[0].icon]);
   iconElement.setAttribute("alt", `response.data.weather[0].description`);
 }
 
