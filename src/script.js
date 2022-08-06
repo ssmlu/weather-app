@@ -1,8 +1,6 @@
 //Main date & time update
 let now = new Date();
-
-let h2 = document.querySelector("h2");
-
+let h4 = document.querySelector("h4");
 let date = now.getDate();
 let year = now.getFullYear();
 
@@ -16,7 +14,6 @@ let days = [
   "Saturday",
 ];
 let day = days[now.getDay()];
-
 let months = [
   "January",
   "Februrary",
@@ -42,23 +39,64 @@ if (now.getMinutes() < 10) {
   minutes = minutes;
 }
 
-h2.innerHTML = `${day}, ${date} ${month} ${year}, ${hour}:${minutes}`;
+h4.innerHTML = `${day}, ${date} ${month} ${year}, ${hour}:${minutes}`;
 
-//Search location weather information
+//Next five days
+let shortdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+let day1 = document.querySelector("#day-1");
+if ([now.getDay() + 1] > 6) {
+  day1.innerHTML = `${shortdays[now.getDay() + 1 - 7]}`;
+} else {
+  day1.innerHTML = `${shortdays[now.getDay() + 1]}`;
+}
+let day2 = document.querySelector("#day-2");
+if ([now.getDay() + 2] > 6) {
+  day2.innerHTML = `${shortdays[now.getDay() + 2 - 7]}`;
+} else {
+  day2.innerHTML = `${shortdays[now.getDay() + 2]}`;
+}
+let day3 = document.querySelector("#day-3");
+if ([now.getDay() + 3] > 6) {
+  day3.innerHTML = `${shortdays[now.getDay() + 3 - 7]}`;
+} else {
+  day3.innerHTML = `${shortdays[now.getDay() + 3]}`;
+}
+let day4 = document.querySelector("#day-4");
+if ([now.getDay() + 4] > 6) {
+  day4.innerHTML = `${shortdays[now.getDay() + 4 - 7]}`;
+} else {
+  day4.innerHTML = `${shortdays[now.getDay() + 4]}`;
+}
+let day5 = document.querySelector("#day-5");
+if ([now.getDay() + 5] > 6) {
+  day5.innerHTML = `${shortdays[now.getDay() + 5 - 7]}`;
+} else {
+  day5.innerHTML = `${shortdays[now.getDay() + 5]}`;
+}
+
+//Search city weather information
 //Find user location weather information
 let apiKey = "e53e54a43247d25856afdd76e66e6441";
 function inputTemperature(response) {
   let mainTemp = Math.round(response.data.main.temp);
-  let h3 = document.querySelector("h3");
-  h3.innerHTML = `${mainTemp}`;
-  let searchHumidity = document.querySelector("#humidity");
-  let newHumidity = response.data.main.humidity;
-  searchHumidity.innerHTML = `Humidity: ${newHumidity}% `;
-  let searchWind = document.querySelector("#wind");
-  let newWind = Math.round(response.data.wind.speed);
-  searchWind.innerHTML = `Wind: ${newWind}KM/H `;
-  let weatherDescription = document.querySelector("#descript");
-  weatherDescription.innerHTML = response.data.weather[0].description;
+  let h2 = document.querySelector("h2");
+  h2.innerHTML = `${mainTemp}`;
+
+  let elementDescription = document.querySelector("#descript");
+  let elementHumidity = document.querySelector("#humidity");
+  let elementWind = document.querySelector("#wind");
+  let elementIcon = document.querySelector("#icon");
+
+  elementDescription.innerHTML = `${response.data.weather[0].description}`;
+  elementHumidity.innerHTML = `Humidity: ${response.data.main.humidity}% `;
+  elementWind.innerHTML = `Wind: ${response.data.wind.speed}KM/H `;
+  elementIcon.setAttribute(
+    "src",
+    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+  );
+  elementIcon.setAttribute("alt", `response.data.weather[0].description`);
+
   let h1 = document.querySelector("h1");
   h1.innerHTML = response.data.name;
 }
@@ -75,20 +113,20 @@ function findPosition(event) {
   navigator.geolocation.getCurrentPosition(userPositionInfo);
 }
 
-let findUserButton = document.querySelector("#use-my-location");
+let findUserButton = document.querySelector("#findMe");
 findUserButton.addEventListener("click", findPosition);
 
 //Search Location name update
 function search(event) {
   event.preventDefault();
-  let searchLocation = document.querySelector("#inputLocation1");
+  let searchLocation = document.querySelector("#inputCity");
 
   let h1 = document.querySelector("h1");
   if (searchLocation.value) {
     h1.innerHTML = `${searchLocation.value}`;
   } else {
     h1.innerHTML = null;
-    alert("Please enter a location");
+    alert("Please enter a city");
   }
 
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${searchLocation.value}&appid=${apiKey}&units=metric`;
@@ -96,22 +134,8 @@ function search(event) {
   axios.get(`${apiUrl}`).then(inputTemperature);
 }
 
-let input = document.querySelector("#location-form");
+let input = document.querySelector("#city-search");
 input.addEventListener("submit", search);
-
-//Next five days
-let shortdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-
-let day1 = document.querySelector("#day-1");
-day1.innerHTML = `${shortdays[now.getDay() + 1]}`;
-let day2 = document.querySelector("#day-2");
-day2.innerHTML = `${shortdays[now.getDay() + 2]}`;
-let day3 = document.querySelector("#day-3");
-day3.innerHTML = `${shortdays[now.getDay() + 3]}`;
-let day4 = document.querySelector("#day-4");
-day4.innerHTML = `${shortdays[now.getDay() + 4]}`;
-let day5 = document.querySelector("#day-5");
-day5.innerHTML = `${shortdays[now.getDay() + 5]}`;
 
 //Main unit change
 //let tempFahrenheit = document.querySelector("h3");
