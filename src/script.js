@@ -79,15 +79,15 @@ if ([now.getDay() + 5] > 6) {
 //Find user location weather information
 let apiKey = "e53e54a43247d25856afdd76e66e6441";
 function inputTemperature(response) {
-  let mainTemp = Math.round(response.data.main.temp);
   let h2 = document.querySelector("h2");
-  h2.innerHTML = `${mainTemp}`;
-
   let elementDescription = document.querySelector("#descript");
   let elementHumidity = document.querySelector("#humidity");
   let elementWind = document.querySelector("#wind");
   let elementIcon = document.querySelector("#icon");
 
+  celsiusTemperature = response.data.main.temp;
+
+  h2.innerHTML = Math.round(celsiusTemperature);
   elementDescription.innerHTML = `${response.data.weather[0].description}`;
   elementHumidity.innerHTML = `Humidity: ${response.data.main.humidity}% `;
   elementWind.innerHTML = `Wind: ${response.data.wind.speed}KM/H `;
@@ -120,7 +120,6 @@ findUserButton.addEventListener("click", findPosition);
 function search(event) {
   event.preventDefault();
   let searchLocation = document.querySelector("#inputCity");
-
   let h1 = document.querySelector("h1");
   if (searchLocation.value) {
     h1.innerHTML = `${searchLocation.value}`;
@@ -128,9 +127,7 @@ function search(event) {
     h1.innerHTML = null;
     alert("Please enter a city");
   }
-
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${searchLocation.value}&appid=${apiKey}&units=metric`;
-
   axios.get(`${apiUrl}`).then(inputTemperature);
 }
 
@@ -138,22 +135,27 @@ let input = document.querySelector("#city-search");
 input.addEventListener("submit", search);
 
 //Main unit change
-//let tempFahrenheit = document.querySelector("h3");
-//let mainCelsius = 16;
-//let mainFahrenheit = Math.round(mainCelsius * 1.8 + 32);
+function displayFahrenheittemp(event) {
+  event.preventDefault();
+  let tempFahrenheit = Math.round((celsiusTemperature * 9) / 5 + 32);
+  // Add the active class
+  celsiusLink.classList.remove("active");
+  fahrenheitLink.classList.add("active");
+  let elementTemperature = document.querySelector("h2");
+  elementTemperature.innerHTML = `${tempFahrenheit}`;
+}
+function displayCelsiustemp(event) {
+  event.preventDefault();
+  let elementTemperature = document.querySelector("h2");
+  elementTemperature.innerHTML = Math.round(celsiusTemperature);
+}
 
-//function convertToFahrenheit(event) {
-//event.preventDefault();
-//tempFahrenheit.innerHTML = `${mainFahrenheit}`;
-//}
+let fahrenheitLink = document.querySelector("#fahrenheit-link");
+fahrenheitLink.addEventListener("click", displayFahrenheittemp);
 
-//let toFahrenheit = document.querySelector("#tempFahrenheit");
-//toFahrenheit.addEventListener("click", convertToFahrenheit);
+let celsiusLink = document.querySelector("#celsius-link");
+celsiusLink.addEventListener("click", displayCelsiustemp);
 
-//function convertToCelsius(event) {
-//event.preventDefault();
-//h3.innerHTML = `${placeMainCelsius}`;
-//}
+let celsiusTemperature = null;
 
-//let toCelsius = document.querySelector("#tempCelsius");
-//toCelsius.addEventListener("click", convertToCelsius);
+userPositionInfo("Fitzroy");
