@@ -63,38 +63,40 @@ let iconConvert = {
   "50n": "svg/mist.svg",
 };
 
-//Next five days
-let shortdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+  let days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  return days[day];
+}
 
-let day1 = document.querySelector("#day-1");
-if ([now.getDay() + 1] > 6) {
-  day1.innerHTML = `${shortdays[now.getDay() + 1 - 7]}`;
-} else {
-  day1.innerHTML = `${shortdays[now.getDay() + 1]}`;
+function displayForecast(response) {
+  let forecast = response.data.daily;
+  let forecastElement = document.querySelector("#forecast");
+  let forecastHTML = `<div class="row">`;
+  forecast.forEach(function (forecastDay, index) {
+    if (index < 5) {
+      forecastHTML =
+        forecastHTML +
+        `
+        <div class="col">
+        <div class="forecast-date">${formatDay(forecastDay.dt)}</div>
+        <img class="forecast-icon" src="svg/${
+          iconConvert[forecastDay.weather[0].icon]
+        }.svg" alt="" width="52" />
+        <div class="forecast-temp">${Math.round(forecastDay.temp.day)}</div>
+        </div>
+        `;
+    }
+  });
+  forecastHTML = forecastHTML + `</div>`;
+  forecastElement.innerHTML = forecastHTML;
 }
-let day2 = document.querySelector("#day-2");
-if ([now.getDay() + 2] > 6) {
-  day2.innerHTML = `${shortdays[now.getDay() + 2 - 7]}`;
-} else {
-  day2.innerHTML = `${shortdays[now.getDay() + 2]}`;
-}
-let day3 = document.querySelector("#day-3");
-if ([now.getDay() + 3] > 6) {
-  day3.innerHTML = `${shortdays[now.getDay() + 3 - 7]}`;
-} else {
-  day3.innerHTML = `${shortdays[now.getDay() + 3]}`;
-}
-let day4 = document.querySelector("#day-4");
-if ([now.getDay() + 4] > 6) {
-  day4.innerHTML = `${shortdays[now.getDay() + 4 - 7]}`;
-} else {
-  day4.innerHTML = `${shortdays[now.getDay() + 4]}`;
-}
-let day5 = document.querySelector("#day-5");
-if ([now.getDay() + 5] > 6) {
-  day5.innerHTML = `${shortdays[now.getDay() + 5 - 7]}`;
-} else {
-  day5.innerHTML = `${shortdays[now.getDay() + 5]}`;
+
+function getForecast(coordinates) {
+  let apiKey = "e53e54a43247d25856afdd76e66e6441";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayForecast);
 }
 
 function displayTemperature(response) {
@@ -114,6 +116,8 @@ function displayTemperature(response) {
   windElement.innerHTML = `Wind: ${Math.round(response.data.wind.speed)}KM/H `;
   iconElement.setAttribute("src", iconConvert[response.data.weather[0].icon]);
   iconElement.setAttribute("alt", `response.data.weather[0].description`);
+
+  getForecast(response.data.coord);
 }
 
 function search(event) {
