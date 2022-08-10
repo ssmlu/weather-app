@@ -43,24 +43,24 @@ h4.innerHTML = `${day}, ${date} ${month} ${year}, ${hour}:${minutes}`;
 
 //Update weather icons
 let iconConvert = {
-  "01d": "svg/clearsky.svg",
-  "01n": "svg/clearsky.svg",
-  "02d": "svg/fewclouds.svg",
-  "02n": "svg/fewclouds.svg",
-  "03d": "svg/scatteredclouds.svg",
-  "03n": "svg/scatteredclouds.svg",
-  "04d": "svg/brokenclouds.svg",
-  "04n": "svg/brokenclouds.svg",
-  "09d": "svg/showerrain.svg",
-  "09n": "svg/showerrain.svg",
-  "10d": "svg/rain.svg",
-  "10n": "svg/rain.svg",
-  "11d": "svg/thunderstorm.svg",
-  "11n": "svg/thunderstorm.svg",
-  "13d": "svg/snow.svg",
-  "13n": "svg/snow.svg",
-  "50d": "svg/mist.svg",
-  "50n": "svg/mist.svg",
+  "01d": "clearsky",
+  "01n": "clearsky",
+  "02d": "fewclouds",
+  "02n": "fewclouds",
+  "03d": "scatteredclouds",
+  "03n": "scatteredclouds",
+  "04d": "brokenclouds",
+  "04n": "brokenclouds",
+  "09d": "showerrain",
+  "09n": "showerrain",
+  "10d": "rain",
+  "10n": "rain",
+  "11d": "thunderstorm",
+  "11n": "thunderstorm",
+  "13d": "snow",
+  "13n": "snow",
+  "50d": "mist",
+  "50n": "mist",
 };
 
 function formatDay(timestamp) {
@@ -72,19 +72,20 @@ function formatDay(timestamp) {
 
 function displayForecast(response) {
   let forecast = response.data.daily;
+
   let forecastElement = document.querySelector("#forecast");
   let forecastHTML = `<div class="row">`;
   forecast.forEach(function (forecastDay, index) {
-    if (index < 5) {
+    if (index > 0 && index < 6) {
       forecastHTML =
         forecastHTML +
         `
-        <div class="col">
+        <div class="col" id="sm-summary">
         <div class="forecast-date">${formatDay(forecastDay.dt)}</div>
         <img class="forecast-icon" src="svg/${
           iconConvert[forecastDay.weather[0].icon]
         }.svg" alt="" width="52" />
-        <div class="forecast-temp">${Math.round(forecastDay.temp.day)}</div>
+        <div id="forecast-temp" >${Math.round(forecastDay.temp.day)}°</div>
         </div>
         `;
     }
@@ -114,7 +115,8 @@ function displayTemperature(response) {
   descriptionElement.innerHTML = `${response.data.weather[0].description}`;
   humidityElement.innerHTML = `Humidity: ${response.data.main.humidity}% `;
   windElement.innerHTML = `Wind: ${Math.round(response.data.wind.speed)}KM/H `;
-  iconElement.setAttribute("src", iconConvert[response.data.weather[0].icon]);
+  let iconPath = iconConvert[response.data.weather[0].icon];
+  iconElement.setAttribute("src", `svg/${iconPath}.svg`);
   iconElement.setAttribute("alt", `response.data.weather[0].description`);
 
   getForecast(response.data.coord);
@@ -157,6 +159,8 @@ function displayFahrenheittemp(event) {
 }
 function displayCelsiustemp(event) {
   event.preventDefault();
+  celsiusLink.classList.add("active");
+  fahrenheitLink.classList.remove("active");
   let elementTemperature = document.querySelector("h2");
   elementTemperature.innerHTML = Math.round(celsiusTemperature);
 }

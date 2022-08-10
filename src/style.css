@@ -85,9 +85,8 @@ ul {
 .unit-controls .active {
   color: black;
   cursor: default;
-  font-weight: 300;
+  font-weight: 500;
 }
-
 .city-temperatureinfo {
   display: inline-flex;
   flex-direction: row;
@@ -101,24 +100,14 @@ ul {
   padding-top: 12px;
   font-size: 16px;
   line-height: 24px;
-  opacity: 0.8;
 }
-.sm-nextdaysummary {
-  display: block;
+#sm-summary {
   text-align: center;
-  padding: 8px 4px;
 }
-.sm-day {
-  margin: 0 auto;
-  font-weight: 500;
-  padding-bottom: 4px;
+img {
+  margin: 12px 0;
 }
-.sm-temp {
-  margin: 16px 0 16px 0;
-}
-.sm-weather-icon {
-  width: 60px;
-}
+
 #descript {
   text-transform: capitalize;
 }
