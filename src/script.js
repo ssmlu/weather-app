@@ -85,7 +85,7 @@ function displayForecast(response) {
         <img class="forecast-icon" src="svg/${
           iconConvert[forecastDay.weather[0].icon]
         }.svg" alt="" width="52" />
-        <div id="forecast-temp" >${Math.round(forecastDay.temp.day)}°</div>
+        <div id="forecast-temp" >${Math.round(forecastDay.temp.day)} °C</div>
         </div>
         `;
     }
