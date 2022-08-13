@@ -119,6 +119,10 @@ function displayTemperature(response) {
   iconElement.setAttribute("src", `svg/${iconPath}.svg`);
   iconElement.setAttribute("alt", `response.data.weather[0].description`);
 
+  // Add the active class
+  celsiusLink.classList.add("active");
+  fahrenheitLink.classList.remove("active");
+
   getForecast(response.data.coord);
 }
 
